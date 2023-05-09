@@ -11,7 +11,7 @@ const Dashboard = () => {
       </div>
       <div className='flex gap-10'>
         <button className="btn" onClick={() => navigate('/table')}>Table Page</button>
-        <button className="btn">Chart Page</button>
+        <button className="btn" onClick={() => navigate('/chart')}>Chart Page</button>
       </div>
     </div>
   )

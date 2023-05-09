@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DonutChart from '../components/DonutChart'
+import axios from 'axios';
 
 const ChartPage = () => {
+  const [dataGraph, setDataGraph] = useState([]);
+
+  useEffect(() => {
+    axios.get(`http://127.0.0.1:4200/api/v1/news/graph/2022-12-12/2023-02-24/*`)
+      .then(res => {
+        setDataGraph(res.data.aggregations);
+      })
+      .catch(err => console.log(err))
+  }, []);
+
   return (
     <div style={{ minHeight: '90vh' }}>
       <div className='flex justify-between'>
-        <DonutChart value={'top_person'} title={'TOP PERSON'} id={'top_person'} />
-        <DonutChart value={'top_organisasi'} title={'TOP ORGANIZATION'} id={'top_organisasi'} />
-        <DonutChart value={'top_location'} title={'TOP LOCATION'} id={'top_location'} />
+        <DonutChart data={dataGraph?.top_person?.buckets} title={'TOP PERSON'} id={'top_person'} />
+        <DonutChart data={dataGraph?.top_organisasi?.buckets} title={'TOP ORGANIZATION'} id={'top_organisasi'} />
+        <DonutChart data={dataGraph?.top_location?.buckets} title={'TOP LOCATION'} id={'top_location'} />
       </div>
     </div>
   )

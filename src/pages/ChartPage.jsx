@@ -3,6 +3,7 @@ import DonutChart from '../components/DonutChart'
 import axios from 'axios';
 import BarChart from '../components/BarChart';
 import WordTag from '../components/WordTag';
+import Maps from '../components/Maps';
 
 const ChartPage = () => {
   const [dataGraph, setDataGraph] = useState([]);
@@ -16,7 +17,7 @@ const ChartPage = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '90vh' }}>
+    <div style={{ minHeight: '90vh', paddingBottom: '5rem' }}>
       <div className='flex justify-between'>
         <DonutChart data={dataGraph?.aggregations?.top_person?.buckets} title={'TOP PERSON'} id={'top_person'} />
         <DonutChart data={dataGraph?.aggregations?.top_organisasi?.buckets} title={'TOP ORGANIZATION'} id={'top_organisasi'} />
@@ -27,6 +28,9 @@ const ChartPage = () => {
       </div>
       <div className='mt-10'>
         <WordTag data={dataGraph?.word_tag} title={'WORD TAG'} id={'word_tag'} />
+      </div>
+      <div className='mt-10'>
+        <Maps id={'maps'} />
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ const Dashboard = () => {
   const [graph, setGraph] = useState([]);
   const [startDate, setStartDate] = useState('2022-12-12');
   const [endDate, setEndDate] = useState('2023-02-04');
+  const [searchInput, setSearchInput] = useState('*');
 
   useEffect(() => {
     axios.get('http://127.0.0.1:4200/api/v1/news/graph/2022-12-12/2023-02-24/*')
@@ -17,13 +18,7 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
-    let url = `http://127.0.0.1:4200/api/v1/news`;
-    if (startDate && endDate) {
-      url += `/${startDate}/${endDate}/*`;
-    } else {
-      url += '/*';
-    }
-    axios.get(url)
+    axios.get(`http://127.0.0.1:4200/api/v1/news/${startDate}/${endDate}/${searchInput}`)
       .then(res => {
         setData(res.data.data);
       })
@@ -39,6 +34,16 @@ const Dashboard = () => {
     setEndDate(e.target.value);
     console.log(e.target.value);
   }
+
+  const handleSearchByKeyword = (e) => {
+    e.preventDefault();
+    axios.get(`http://127.0.0.1:4200/api/v1/news/${startDate}/${endDate}/${searchInput}`)
+      .then(res => {
+        setData(res.data.data);
+        console.log(res.data.data);
+      })
+      .catch(err => console.log(err))
+  }  
   
   return (
     <div>
@@ -46,11 +51,21 @@ const Dashboard = () => {
         <h1 className='text-3xl font-bold'>Dashboard</h1>
         <hr />
       </div>
-      <div className='mb-5'>
-        <label htmlFor='startDate' className='mr-2'>Start Date:</label>
-        <input type='date' id='startDate' value={startDate} onChange={handleStartDateChange} className='border rounded-md p-1' />
-        <label htmlFor='endDate' className='ml-4 mr-2'>End Date:</label>
-        <input type='date' id='endDate' value={endDate} onChange={handleEndDateChange} className='border rounded-md p-1' />
+      <div className='flex justify-between'>
+        <div className='mb-5 w-full'>
+          <label htmlFor='startDate' className='mr-2'>Start Date:</label>
+          <input type="date" id='startDate' value={startDate} onChange={handleStartDateChange} className="input input-bordered w-1/5 max-w-xs" />
+          <label htmlFor='endDate' className='ml-4 mr-2'>End Date:</label>
+          <input type="date" id='endDate' value={endDate} onChange={handleEndDateChange} className="input input-bordered w-1/5 max-w-xs" />
+        </div>
+        <form className="form-control" onSubmit={handleSearchByKeyword}>
+          <div className="input-group">
+            <input type="text" placeholder="Search…" onChange={(e) => setSearchInput(e.target.value)} className="input input-bordered" />
+            <button className="btn btn-square">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </button>
+          </div>
+        </form>
       </div>
       <div>
         <NewsTable data={data} itemsPerPage={10}/>

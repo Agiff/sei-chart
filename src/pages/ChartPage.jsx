@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DonutChart from '../components/DonutChart'
 import axios from 'axios';
+import BarChart from '../components/BarChart';
 
 const ChartPage = () => {
   const [dataGraph, setDataGraph] = useState([]);
@@ -19,6 +20,9 @@ const ChartPage = () => {
         <DonutChart data={dataGraph?.top_person?.buckets} title={'TOP PERSON'} id={'top_person'} />
         <DonutChart data={dataGraph?.top_organisasi?.buckets} title={'TOP ORGANIZATION'} id={'top_organisasi'} />
         <DonutChart data={dataGraph?.top_location?.buckets} title={'TOP LOCATION'} id={'top_location'} />
+      </div>
+      <div className='mt-10'>
+        <BarChart data={dataGraph?.time_series?.buckets?.slice(0, 10)} title={'BAR CHART'} id={'time_series'} />
       </div>
     </div>
   )
